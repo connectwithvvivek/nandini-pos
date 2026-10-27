@@ -89,7 +89,9 @@ USE_SQLITE = os.environ.get('USE_SQLITE', 'False').lower() in ('true', '1', 'yes
 )
 
 DATABASE_URL = os.environ.get('DATABASE_URL', '')
-if DATABASE_URL:
+has_db_url = bool(DATABASE_URL and '[PASSWORD]' not in DATABASE_URL and '[YOUR-PASSWORD]' not in DATABASE_URL)
+
+if has_db_url and not USE_SQLITE:
     import urllib.parse
     parsed = urllib.parse.urlparse(DATABASE_URL)
     DATABASES = {
